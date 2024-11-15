@@ -1,0 +1,28 @@
+@{
+    ViewBag.Title = "Splash Page";
+    var tryNewExp = SomatusAnalytics.Common.Settings.TRY_NEW_EXP_HOME_LINK;
+}
+  <div class="modal fade show" id="SplashPageModal" tabindex="-1" role="dialog" aria-labelledby="SplashPageModalLabel" >
+        <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header px-3">
+                    <h4 class="modal-title" id="SplashPageModalLabel">New Insights User Experience Sneak Peek!</h4>
+                </div>
+                <div class="modal-body" id="value-list-result">
+
+                    <div class="mx-md-5">
+                        <img src="~/theme/light/images/splashPage_img.svg" class="w-100" alt="image">
+                    </div><p>Insights Dashboards are moving! Their new environment will allow us to take advantage of many new features including search for reports, subscribe, export to Power Point or Excel, embed in SharePoint and much more. To try the new user experience, click below. We will run both in parallel for about a month and note Self Service reports will remain in the old environment for now. Give it a try before the cut over and feel free to send feedback to <strong><a href="mailto:support@indoqubix.com">support@indoqubix.com</a></strong> . And appreciate all those who participated in the pilot.</p> <label>
+                        <input type="checkbox" id="doNotShowCheckbox" class="mr-2"> Do not show this page again
+                    </label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"  class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+                    <a href="@tryNewExp" class="btn btn-primary" target="_blank">Try the new Experience</a>
+                </div>
+
+                
+                </div>
+        </div>
+
+    </div>

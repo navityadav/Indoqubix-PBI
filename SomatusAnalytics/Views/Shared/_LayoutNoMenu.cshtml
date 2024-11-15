@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - RenalIQ Insights</title>
+
+    <meta name="msapplication-TileColor" content="#ffffff" />
+
+    @RenderPage("~/Views/Shared/_BaseCSS.cshtml")
+    <link type="text/css" rel="stylesheet" href="~/theme/indoqubix/lib/slidenav/jquery.mmenu.css">
+
+
+    <link rel="stylesheet" href="~/theme/indoqubix/css/skin-1.css">
+    <link rel="stylesheet" href="~/theme/indoqubix/css/powerbi.css">
+</head>
+<body>
+    <div class="page-wrapper container-fluid">
+        <div class="row">
+            
+            @RenderBody()
+        </div>
+    </div>
+
+
+    @RenderPage("~/Views/Shared/_Footer.cshtml")
+    @RenderPage("~/Views/Shared/_BaseJS.cshtml")
+
+</body>
+
+
+</html>

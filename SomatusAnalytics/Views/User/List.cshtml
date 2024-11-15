@@ -1,0 +1,197 @@
+﻿
+@model SomatusAnalytics.Models.UserLists
+
+@{
+    ViewBag.Title = "User Management";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+
+}
+    <div class="admin content " data-ref="init_user_datatable_list" id="display-userlist-block">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4> User Management</h4>
+                    <p class="mb-0"></p>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item "><a href="javascript:void(0)">Admin</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0)">User Management</a></li>
+                </ol>
+            </div>
+        </div>
+        <div class="row page-actions">
+            <div class="col-12">
+                <a href="#" class="pull-right"
+                   data-toggle="modal" data-target="#addOrUpdUsrModal" id="addUsrButton" >
+                    <i class="fa fa-plus"></i> Add User
+                </a>
+            </div>
+        </div>
+
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="default-content1 mid-table">
+                        <table id="user-data-table" class="table table-hover" style="width:100%" aria-describedby="User Lists">
+                            <thead>
+                                <tr>
+                                    <th width="5" scope="col" class="no-sort"></th>
+                                    <th  scope="col">Login ID</th>
+                                    <th  scope="col">Login Type</th>
+                                    <th  scope="col">Client</th>
+                                    <th  scope="col">User Name</th>
+
+                                    <th  scope="col">Mobile </th>
+                                    <th  scope="col">Active</th>
+                                    <th  scope="col" >Role</th>
+                                    <th width="5"  scope="col"  class="no-sort"></th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (SomatusAnalytics.Models.UserModel user in Model.users)
+                                {
+                                    var roleIds = "";
+                                    var roles = "";
+                                    if (user.role != null)
+                                    {
+
+                                        roles = string.Join(",", user.role.Values);
+                                        roleIds = string.Join(",", user.roleIds);
+
+                                    }
+
+                                        <tr id="@user.userId">
+                                            <td class="text-left">
+                                                <div class="" role="group" aria-label="action buttons">
+                                                    <a class="btn-link text-danger btn-delete-user" onclick="deleteUser('@user.userId');"><i class="fa fa-trash"></i> </a>
+                                                </div>
+                                            </td>
+
+                                            <td id="user-list-@user.loginId">
+                                                @user.loginId
+                                            </td>
+                                            <td id="user-list-@user.loginType">@user.loginType</td>
+                                            <td id="user-list-@user.clientName">@string.Join(",", user.clients.Values)</td>
+                                            <td id="user-list-@user.displayName">@user.displayName</td>
+                                            <td id="user-list-@user.mobile"><div class="ellipsis">@user.mobile</div></td>
+                                            <td id="user-list-@user.isActive">
+                                                @if (@user.isActive.Equals("N") == true)
+                                                {
+                                                    <span class=" text-danger">NO</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-success">YES</span>
+
+                                                }
+                                            </td>
+                                            <td id="user-list-roles">
+                                                <div class="ellipsis">
+                                                @roles
+                                                </div>
+
+                                            </td>
+                                            <td class="text-right">
+                                                <div class="" role="group" aria-label="action buttons">
+                                                    <input type="hidden" value="@user.displayName" name="display-@user.userId" id="display-@user.userId" />
+                                                    <a class="btn-link" data-toggle="modal" data-target="#addOrUpdUsrModal"
+                                                       onClick="editUserModel('@user.userId', '@user.email', '@user.loginType', '@user.clientName', '@user.clientId', '@user.mobile', 'display-@user.userId', '@roleIds', '@string.Join(",",user.clientIds)');">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </a>
+                                                </div>
+
+                                            </td>
+
+                                        </tr>
+
+                                    }
+
+                                </tbody>
+                        </table>
+                    </div>
+                   
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="modal fade " id="addOrUpdUsrModal" tabindex="-1" role="dialog" aria-labelledby="addOrUpdUsrModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content" data-ref="init_user_model">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="addOrUpdUsrModalLabel">User Add/Update</h4>
+                    </div>
+                    <form id="newUsrFrm" name="newUsrFrm" method="post" action="" novalidate="novalidate">
+                    <div class="modal-body">
+                            <input type="hidden" class="form-control" id="userId" name="userId">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="email">*Email/Login Id</label>
+                                        <input type="email" class="form-control" name="email" id="email" placeholder="Enter Email Id" required="required">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="displayName">*Display Name</label>
+                                        <input type="text" class="form-control" id="displayName" name="displayName" placeholder="Enter Display Name " required="required">
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group  col-md-4">
+                                            <label for="loginType">*Login Type</label>
+                                            <select required class="form-control" id="loginType" name="loginType">
+                                                <option value="AD">AD</option>
+                                                <option value="LOCAL">LOCAL</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group  col-md-8">
+                                            <label for="mobile">Mobile</label>
+                                            <input type="mobile" class="form-control" name="mobile" id="mobile" placeholder="Enter Mobile Number" >
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="clientName">*Client Name</label>
+                                        <select id="clientName" class="form-control" multiple required name="clientName" onchange="updClientFilters()" title="Select Client...">
+                                            @foreach (SomatusAnalytics.Models.ClientModel client in Model.clients)
+                                            {
+                                                <option value='@client.clientId'>@client.clientName</option>
+                                            }
+                                        </select>
+                                        <input type="hidden" class="form-control" id="defClientId" name="defClientId">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="userRole">*User Role</label>
+                                        <select class="form-control" multiple required id="userRole" name="userRole" title="Select Role...">
+                                            @foreach (var role in Model.roles)
+                                            {
+                                                <option value='@role.Key'>@role.Value</option>
+
+                                            }
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="row px-3" id="reportFilters">
+                               
+                            </div>
+                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="add-user-btn">Save</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+

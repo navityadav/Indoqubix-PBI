@@ -1,0 +1,44 @@
+﻿@model SomatusAnalytics.Models.ErrorConfig
+@{
+    ViewBag.Title = "Error - 400";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+    <div class="admin content m-25 p-25" data-ref="">
+        <input type="hidden" class="form-control" name="pagetype" id="pagetype" value="LOGIN">
+
+        <div class="card">
+             
+            <div class="card-body">
+                <h1 class="text-danger p-30">@Model.errorTitle</h1>
+
+                <div class="row-fluid">
+                    <div class="">
+                        <div class="span12">
+                            <div class="hero-unit">
+                                <!--h1>404 Error</!h1 -->
+                                <p> @Model.ErrorMessage</p>
+                                @Model.helpMessage
+                            </div>
+                        </div>
+                        @if (@Model.exception != null)
+                        {
+                            <a class="text-danger" data-toggle="collapse" href="#errordetail" role="button" aria-expanded="false" aria-controls="errordetail">
+                                <i class="icon icon-hand-right"></i> Click here to view error detail
+                            </a>
+                            <div class="collapse multi-collapse" id="errordetail">
+                                <div class="card card-body">
+                                    @Model.exception - error
+                                </div>
+                            </div>
+                        }
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a type="button" class="btn btn-primary pull-left" href="/">  Home </a>
+            </div>
+        </div>
+    </div>
+

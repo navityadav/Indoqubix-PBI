@@ -1,0 +1,278 @@
+﻿@model SomatusAnalytics.Models.ReportList
+@{
+    ViewBag.Title = "Content Management";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+
+}
+
+
+
+
+<div class="admin content " data-ref="init_content_management" id="display-reportlist-block">
+    <div class="row page-titles mx-0">
+        <div class="col-sm-6 p-md-0">
+            <div class="welcome-text">
+                <h4> Content Management</h4>
+                <p class="mb-0"></p>
+            </div>
+        </div>
+        <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item "><a href="javascript:void(0)">Admin</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Content Managemenrt</a></li>
+            </ol>
+        </div>
+    </div>
+    <div class="row page-actions">
+        <div class="col-12">
+            <a href="#" class="pull-right addMenu">
+                <i class="fa fa-plus"></i> Add New Menu
+            </a>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card p-2" id='datatable-configuration-block'>
+                <div id="report-builder-configure">
+                    <div class="card-body p-1 m-0">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-12">
+                                    <table class="table table-condensed m-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">
+                                                    Group/Department
+                                                    
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td scope="col">
+                                                    <select class="form-control" id="menuSelectClient" name="menuSelectClient">
+                                                        @foreach (SomatusAnalytics.Models.ClientModel client in Model.clients)
+                                                        {
+                                                            if (client.clientId == Model.clientId)
+                                                            {
+                                                                <option selected value='@client.clientId'>@client.clientName</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value='@client.clientId'>@client.clientName</option>
+                                                            }
+
+                                                        }
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td scope="col" class="">
+                                                    <div class="p-t-10 m-1 text-primary small"><b>NAVIGATION MENU</b></div>
+                                                    <!-- Additional TreeView Code Starts -->
+                                                    <div >
+                                                         
+                                                        <div class="form-group">
+                                                            <label for="input-select-node" class="sr-only">Search Tree:</label>
+                                                            <input type="input" class="form-control" id="input-select-node" placeholder="Search Menu...">
+                                                        </div>
+                                                    </div>
+                                                    <!-- Additional TreeView Code Ends -->
+                                                    <div class="table-outer-scroll" style="height: calc(100vh - 340px);">
+                                                        <!-- TAB MENU CONTENT -->
+                                                        <div id="tree"></div>
+
+                                                    </div>
+                                                    <!-- EXPENDAD MENU TO ADD -->
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-lg-8 col-md-4 col-sm-12 " id='table-column-selection'>
+                                    <form method="post" action="" " name="frmMenuContent" id="frmMenuContent">
+                                        <div class="alert alert-light notification p-5 m-2" id="no-selection">
+                                            <p class="notificaiton-title mb-2">
+                                                <strong><i class="fa fa-info-circle"></i> Information </strong>
+                                            </p>
+                                            <p>Please select navigation menu on the left side for updating  </p>
+
+                                            <h6>OR</h6>
+
+                                            <a href="#" class="addMenu btn-link">
+                                                Click here to Add New Menu
+                                            </a>
+
+                                        </div>
+                                        <table class="table table-condensed hidden m-0" id="content-detail">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col"  id="card-title">
+                                                        -
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td scope="col" >
+                                                        <div class="table-outer-scroll" style="height: calc(100vh - 330px);">
+                                                            <div class="row m-0 m-t-2">
+                                                                <div class="col-md-12">
+                                                                    <input type="hidden" class="form-control" id="menuId" name="menuId">
+                                                                    <input type="hidden" class="form-control" id="menuReportId" name="menuReportId">
+                                                                    <input type="hidden" class="form-control" id="menuOrigURI" name="menuOrigURI">
+                                                                    
+                                                                    <div class="row">
+                                                                        <div class="form-group col-md-2">
+                                                                            <label for="menuIcon">Icon</label>
+                                                                            <select class="form-control" id="menuIcon" name="menuIcon">
+                                                                                <option value='plus'>&#x002B; </option>
+                                                                                <option value='arrow'>&#8624; </option>
+                                                                            </select>
+
+                                                                        </div>
+
+
+                                                                        <div class="form-group col-md-3">
+                                                                            <label for="contentType">
+                                                                                Content Type
+                                                                            </label>
+                                                                            <select class="form-control" id="contentType" name="contentType">
+                                                                                <option value='STATIC'>STATIC</option>
+                                                                                <option value='REPORT'>REPORT</option>
+                                                                            </select>
+                                                                        </div>
+
+                                                                        <div class="form-group  col-md-4">
+                                                                            <label for="userRole">User Role</label>
+                                                                            <select class="form-control" multiple id="userRole" name="userRole" required title="Select Role...">
+                                                                                @foreach (var role in Model.roles)
+                                                                                {
+                                                                                    <option value='@role.Key'>@role.Value</option>
+
+                                                                                }
+                                                                            </select>
+                                                                        </div>
+
+                                                                        <div class="form-group col-md-3">
+                                                                            <label for="menuLabel">
+                                                                                Menu Label
+                                                                            </label>
+                                                                            <input type="text" class="form-control" name="menuLabel" id="menuLabel" placeholder="Enter Label of Menu" required="required">
+                                                                        </div>
+
+
+                                                                    </div>
+                                                                    <div class="row">
+
+                                                                        <div class="form-group  col-md-4">
+                                                                            <label for="menuParent">Parent</label>
+                                                                            <div id="parentMenu">
+
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group col-md-3">
+                                                                            <label for="seqNum">
+                                                                                Display Seq. No.
+                                                                            </label>
+                                                                            <input type="number" class="form-control" name="seqNum" id="seqNum" required placeholder="Enter Menu Seq">
+                                                                        </div>
+                                                                        <div class="form-group col-md-5">
+                                                                            <label for="menuURI">
+                                                                                Menu URI
+                                                                            </label>
+                                                                            <input type="text" class="form-control" id="menuURI" name="menuURI" placeholder="Enter Label of Menu" required="required">
+
+                                                                        </div>
+
+
+
+                                                                        <div class="form-group col-md-12">
+                                                                            <input type="checkbox" id="optIsMenu" name="optIsMenu" data-toggle="toggle" data-onstyle="secondary" data-offstyle="success">
+                                                                            <label class="radio-inline mr-3" for="optIsMenu"> &nbsp;Is Menu</label>
+
+                                                                            <input type="checkbox" id="optAccessControl" name="optAccessControl" data-toggle="toggle" data-onstyle="secondary" data-offstyle="success">
+                                                                            <label class="radio-inline mr-3" for="optAccessControl"> &nbsp; Authorized User Only</label>
+
+                                                                            <input type="checkbox" id="optIsHome" name="optIsHome" data-toggle="toggle" data-onstyle="secondary" data-offstyle="success">
+                                                                            <label class="radio-inline mr-3" for="optIsHome"> &nbsp; Is Home</label>
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                    <div id="static-content-area" class="row">
+
+                                                                        <div class="form-group col-md-12">
+                                                                            <label for="staticTemplate">Select Template</label>
+                                                                            <select class="form-control" id="staticTemplate" name="staticTemplate">
+                                                                                @foreach (SomatusAnalytics.DatabaseModel.ac_static_content_template template in Model.templates)
+                                                                                {
+                                                                                    <option value='@template.template_id'>@template.template_name</option>
+
+                                                                                }
+                                                                            </select>
+                                                                            <input type="hidden" id="hiddenStaticTemplate" />
+                                                                        </div>
+
+                                                                        <div class="menu-placeholder-label"></div>
+
+
+                                                                    </div>
+                                                                    <div id="reportArea" class="row">
+
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="reportId">Report Id</label>
+                                                                            <input type="text" class="form-control" id="reportId" name="reportId" placeholder="Enter Report Id " required>
+
+                                                                        </div>
+
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="workspaceId">Workspace Id</label>
+                                                                            <input type="text" class="form-control" id="workspaceId" name="workspaceId" placeholder="Enter Workspace Id " required>
+                                                                        </div>
+
+                                                                        <div class="form-group col-md-12">
+                                                                            <input type="checkbox" id="optshowtab" name="optshowtab" data-toggle="toggle" data-onstyle="secondary" data-offstyle="success">
+                                                                            <label class="radio-inline mr-3" for="optshowtab"> &nbsp;Display Tab</label>
+
+                                                                            <input type="checkbox" id="optshowfilter" name="optshowfilter" data-toggle="toggle" data-onstyle="secondary" data-offstyle="success">
+                                                                            <label class="radio-inline mr-3" for="optshowfilter">  &nbsp; Display Filter</label>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td scope="col">
+                                                        <div class="m-2">
+                                                            <button type="button" class="btn btn-danger mb-1" aria-label="Delete" id="delMenuContent">Delete</button>
+                                                            <button type="button" class="btn btn-primary mb-1 pull-right" aria-label="Save" id="saveMenuContent">Save</button>
+                                                        </div>
+
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                                        
+                                    </form>
+
+
+                                </div>
+                            </div>
+                        
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

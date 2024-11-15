@@ -1,0 +1,142 @@
+﻿.bg-holder {
+    /*    background-attachment: fixed !important; */
+    background-position: center center;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    background-size: cover;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-image: url("../img/provider-dns-bg.png")!important;
+}
+
+.signin_box .box {
+    width: 100%;
+    padding: 35px;
+    padding-top: 100px;
+    background-color: #fff;
+    min-height: 1000px;
+    height: calc(100vh - 0px);
+    color: white;
+    padding-top: 70px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    text-align: center;
+}
+
+.right-block {
+    text-align: left;
+    color: white;
+    margin-top: 15%;
+    padding: 100px;
+    padding-left:150px;
+    font-size: 63px;
+    line-height: 80px;
+}
+
+.logo {
+    width: 255px !important;
+    margin-top: calc(20% - 10px);
+}
+
+.signin_box .content {
+    margin-top: 5px;
+    text-align: left;
+    color: black;
+}
+
+.signin .account-body {
+    margin-top: calc(30% - 50px);
+}
+
+.signin_ad {
+    position: absolute;
+    width: 412px;
+    margin-top: calc(100vh - 110px);
+    top: 0px;
+}
+
+.signin_box .text-primary {
+    color: #CEE078!important;
+}
+
+.signin_box label {
+    font-size: 13px !important;
+    color: black;
+    text-transform: uppercase;
+}
+
+.signin_box .action-bar {
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: center;
+}
+
+.btn-login {
+    border-radius: 15px !important;
+    line-height: 43px !important;
+    background-color: #CEE078 !important;
+    padding: 0px 30px !important;
+    color: white !important;
+    font-size: 19px;
+    font-family: 'Segoe UI Semibold', 'Segoe UI';
+    width: 100%;
+    /* margin: 20%!important; */
+    text-transform: uppercase;
+    margin-bottom:10px;
+}
+
+
+.signin_box .action {
+    padding-top: 10px;
+}
+
+.signin_box a{
+    color:white!important;
+}
+
+.signin_box a:hover {
+    text-decoration:underline;
+}
+
+.forget-password {
+    line-height: 42px;
+
+}
+.forget-password a {
+    color: black !important;
+}
+
+
+
+.signin_box .btn-primary {
+    color: #fff;
+    background-color: #011014;
+    border-color: #000203;
+}
+
+.signin_box .box h5 {
+    color: white;
+}
+
+/** Validator */
+    .signin_box .error {
+    color: #fd7777fa;
+    margin-bottom: 0px;
+}
+
+.signin_box input.error {
+    color: red;
+    border: 1px solid red;
+}
+
+.signin_box .btn-primary:hover {
+    color: #fff;
+    background-color: rgba(7, 25, 35,1);
+    border-color: #000203;
+}
+

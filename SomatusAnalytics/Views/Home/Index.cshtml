@@ -1,0 +1,166 @@
+﻿@model SomatusAnalytics.Models.IndexConfig
+@{
+    ViewBag.Title = "Indoqubix CloudTech";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+    var theme = SomatusAnalytics.Common.Settings.THEME;
+
+    var IS_AUTH_TYPE_AD = SomatusAnalytics.Common.Settings.IS_AUTH_TYPE_AD;
+    var systemBaseURL = "https://analyticsi.renaliq.com/home/signin";
+    var adClass = "signin_ad";
+
+    if (IS_AUTH_TYPE_AD)
+    {
+        systemBaseURL = "/home/signin";
+        adClass = "";
+    }
+
+    var redirectURL = Request.RawUrl;
+    if (redirectURL.Contains("redirect")) {
+        var urls = redirectURL.Split('?');
+        systemBaseURL += "?" + urls[1];
+    }
+}
+
+<div class="func-content content" data-ref="init_login">
+    <div class="auth-form">
+        <div class="text-center mb-3">
+            <div class="auth-form-logo">
+                <img src="~/theme/light/images/indoqubix-logo.png?v=1.1" alt="Renaliq Insight" class="img-fluid" />
+            </div>
+        </div>
+        <h5 class="text-center mb-4 mt-5">Welcome back! Please login to your account</h5>
+        @if (!Request.IsAuthenticated)
+        {
+            if (!IS_AUTH_TYPE_AD)
+            {
+                <form name="login-form" action="~/home/localSignIn" method="POST" id="login-form">
+                    <div class="form-group">
+                        <label class="mb-1"><strong>Email</strong></label>
+                        <input type="email" value="" class="form-control" placeholder="Enter your Email Id" name="username" tabindex="1" id="username" required="required">
+
+                    </div>
+                    <div class="form-group">
+                        <label class="mb-1"><strong>Password</strong></label>
+                        <input type="password" value="" class="form-control" placeholder="Current Password" tabindex="2" name="password" id="password" required="required">
+                    </div>
+                    <input type="hidden" class="form-control" name="redirect" id="redirect" value="@(redirectURL)">
+
+                    <div class="form-row d-flex justify-content-between mt-4 mb-2">
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox ml-1">
+                                <input type="checkbox" class="custom-control-input" id="basic_checkbox_1">
+                                <label class="custom-control-label" for="basic_checkbox_1">Remember my preference</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-block" tabindex="4" id='btn-login'>
+                            <i class="fa fa-lock"></i> SIGN IN
+                        </button>
+                    </div>
+                </form>
+                <div class="new-account mt-3">
+                    <p>Forgot Password? <a class="text-primary" href="~/home/forgetpassword">Click here to reset password</a></p>
+                </div>
+            }
+        }
+
+        @if (theme != "provider" && !@Model.error.Equals("NO_PERMISSION"))
+        {
+            <hr class="mt-lg-5">
+            <a href="@systemBaseURL" style="text-decoration: none;color:black;" id="ad-login">
+                <div class="text-center mt-lg-5 mb-lg-5 mb-2 mt-2">
+                    <button type="submit" class="btn btn-outline-dark">
+                        <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 512 512" width="18px" height="18px">
+                            <path style="fill:#4CAF50;" d="M272,240h240V16c0-8.832-7.168-16-16-16H272V240z" />
+                            <path style="fill:#F44336;" d="M240,240V0H16C7.168,0,0,7.168,0,16v224H240z" />
+                            <path style="fill:#2196F3;" d="M240,272H0v224c0,8.832,7.168,16,16,16h224V272z" />
+                            <path style="fill:#FFC107;" d="M272,272v240h224c8.832,0,16-7.168,16-16V272H272z" />
+                        </svg>
+                        Sign In as Somatus Employee
+                    </button>
+                </div>
+            </a>
+        }
+        <div class="text-center">
+        </div>
+        @if (!string.IsNullOrWhiteSpace(Request.QueryString["errormessage"]))
+        {
+            <div class="alert alert-danger alert-dismissible fade show " role="alert" id="msg-invalid">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+
+                <strong>Error!</strong>  @Request.QueryString["errormessage"].
+                <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                    <span><i class="mdi mdi-close"></i></span>
+                </button>
+            </div>
+        }
+
+
+        @if (@Model.error.Equals("NO_AUTH"))
+        {
+            <div class="alert alert-danger alert-dismissible fade show " role="alert" id="msg-invalid">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+
+                <strong>Error!</strong>  Invalid username and password.
+                <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                    <span><i class="mdi mdi-close"></i></span>
+                </button>
+            </div>
+        }
+
+
+        @if (@Model.error.Equals("OTP_EXPD"))
+        {
+            <div class="alert alert-danger alert-dismissible fade show " role="alert" id="msg-invalid">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+
+                <strong>Error!</strong>  Verification Code Expired.
+                <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                    <span><i class="mdi mdi-close"></i></span>
+                </button>
+            </div>
+        }
+
+
+        @if (@Model.error.Equals("LOGOUT"))
+        {
+
+
+        }
+
+        @if (@Model.error.Equals("RESET_PASSWORD_EMAIL"))
+        {
+            <div class="alert alert-success alert-dismissible fade show">
+                Link to reset password has been sent to your email.
+            </div>
+        }
+
+
+        @if (@Model.error.Equals("OTP_MAX_PERMISSION"))
+        {
+            <div class="alert alert-danger alert-dismissible fade show">
+               Exhausted the no. of account verification attempts
+            </div>
+        }
+
+        @if (@Model.error.Equals("NO_PERMISSION"))
+        {
+            <div class="alert alert-danger alert-dismissible fade show">
+                You are not authorized to access application.
+                <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                    <span><i class="mdi mdi-close"></i></span>
+                </button>
+            </div>
+
+            if (IS_AUTH_TYPE_AD)
+            {
+                <div class="input-group m-b-20">
+                    <label>Login As : <b>@ViewBag.Username</b></label>
+                </div>
+                <p>If you want to login as another user then logout and login again.</p>
+                <div class="text-center"><a class="btn btn-dark btn-sm pb-2" href='~/home/SignOut'>Click here to logout</a></div>
+            }
+        }
+    </div>
+</div>

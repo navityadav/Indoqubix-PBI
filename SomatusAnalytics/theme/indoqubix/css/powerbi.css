@@ -1,0 +1,11 @@
+.explorationContainer .exploreCanvas {
+    overflow: visible;
+    margin: 0;
+    box-sizing: border-box;
+    background-color: #FFF!important;
+    -ms-overflow-style: scrollbar;
+}
+
+.logoBar{
+	display:hidden;
+}

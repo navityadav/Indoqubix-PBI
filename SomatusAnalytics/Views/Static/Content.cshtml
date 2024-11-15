@@ -1,0 +1,26 @@
+﻿@model SomatusAnalytics.Models.StaticContentConfig
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div id="errorWrapper">
+        <h2>
+            Error
+        </h2>
+        <pre>
+            @Model.ErrorMessage
+        </pre>
+    </div>
+
+    return;
+}
+<div class="admin content static-content-block" data-ref="init_home">
+   
+        @Html.Raw(@Model.content)
+</div>

@@ -1,0 +1,152 @@
+﻿@model SomatusAnalytics.Models.ReportBuilderDisplayConfig
+
+@{
+    ViewBag.Title = @Model.title;
+    Layout = "~/Views/Shared/_LayoutReportBuilder.cshtml";
+}
+
+@if (Model.reports == null)
+{
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="row message ">
+                <!-- ERROR BLOCK-->
+
+                <div class="row-fluid">
+                    <div class="container-pad text-info">
+
+                        <div class="span12">
+
+                            <div class="hero-unit">
+                               
+                                <p class='title'> Information</p>
+                                <div class="block p-b-20">Reports not available </div>
+                                
+                                
+                                <a href="~/reportbuilder/configure" class="btn btn-primary"><i class="fa fa-cogs"></i> Click here to build new report</a>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <!-- END OF ERROR BLOCK-->
+            </div>
+        </div>
+
+}
+else
+{
+
+            <div class="container ">
+                <div class="row  card-body">
+                    <div class="card-header">
+                        <div class="col-lg-7 col-md-7 col-sm-12">
+                            <div class="main_title no-border "> @Model.title</div>
+                        </div>
+                        <div class="col-lg-5 col-md-5 col-sm-4">
+                            <form>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group form-group-header">
+                                            <label for="select-report">Select Report</label>
+                                            <select data-style="bg-white rounded-pill px-4 py-3 shadow-sm form-control" class="selectpicker w-100" id="reportOptions">
+                                                @foreach (SomatusAnalytics.Models.ReportBuilderSavedReport report in Model.reports)
+                                                {
+                                                    if (report.report_id == Model.selectedReportId)
+                                                    {
+                                                        <option value='@report.report_id' selected>@report.report_name</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value='@report.report_id'>@report.report_name</option>
+                                                    }
+
+                                                }
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 ">
+                                        <div class="form-group form-group-header">
+                                            <label for="select-column">Show/Hide Columns</label>
+                                            <select multiple data-style="bg-white rounded-pill px-4 py-3 shadow-sm form-control" class="selectpicker w-100" id="columnShowHide">
+                                                @{ int temp_seq = 0; }
+                                                @foreach (SomatusAnalytics.Models.ReportBuilderTableColumn column in Model.selectedReport.columns)
+                                                {
+                                                    <option value='@temp_seq' selected>@column.display_name</option>
+                                                    temp_seq++;
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="row message hidden">
+                            <!-- ERROR BLOCK-->
+
+                            <div class="row-fluid">
+                                <div class="container-pad text-info">
+
+                                    <div class="span12">
+
+                                        <div class="hero-unit">
+                                            <!--h1>404 Error</!h1 -->
+                                            <p class='title'> Information</p>
+                                            Data Table based reports not available
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                            <!-- END OF ERROR BLOCK-->
+                        </div>
+
+                        <div class="row " id='datatable-configuration-block'>
+                            <form id="configure-table-form">
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 p-10" id='table-column-selection'>
+                                    <table id="data-table" class="table table-striped table-bordered table-hover " style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                @foreach (SomatusAnalytics.Models.ReportBuilderTableColumn column in Model.selectedReport.columns)
+                                                {
+                                                    <th scope="col">@column.display_name</th>
+                                                }
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (System.Data.DataRow row in Model.selectedReport.data.Rows)
+                                            {
+                                                <tr>
+                                                    @foreach (System.Data.DataColumn col in Model.selectedReport.data.Columns)
+                                                    {
+                                                        <td>@row[@col]</td>
+                                                    }
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+
+
+
+
+                        
+                        </div>
+                    </div>
+                </div>
+
+        
+
+                                                      
+}

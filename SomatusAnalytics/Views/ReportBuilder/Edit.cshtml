@@ -1,0 +1,252 @@
+﻿@model SomatusAnalytics.Models.ReportBuilderDisplayConfig
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<div class="admin content default-content " data-ref="edit_report_builder_Config" parent-menu="report-builder" self-menu="configure">
+    <script type="text/javascript">
+        var reportCondition = @Html.Raw(Json.Encode( @Model.selectedReport.condition));
+        var reportColumn =  @Html.Raw(Json.Encode( @Model.selectedReport.columns));
+
+    </script>
+    <div class="row page-titles mx-0">
+        <div class="col-sm-6 p-md-0">
+            <div class="welcome-text">
+                <h4> <i class="fa fa-cogs"></i> Edit Report</h4>
+                <p class="mb-0"></p>
+            </div>
+        </div>
+        <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="~/reportbuilder/list">Self Service</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Edit Report</a></li>
+            </ol>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card" id='datatable-configuration-block'>
+                <div class="card-body">
+                    @if (Model.selectedReportId <= 0)
+                    {
+                        <div class="form-input-content text-center error-page">
+
+                            <h4>Information </h4>
+                            <p>Self Sevice Feature not enabled, please contact System Administrator</p>
+                            <div>
+                                <a class="btn btn-primary" href="/">Back to Home</a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <form id="configure-table-form">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 col-sm-12 table-outer-scroll">
+                                    <table class="table  table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th colspan='2' scope="col">Report Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan='2' scope="col">
+                                                    <span> @Model.selectedReport.report_name</span>
+
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" colspan='2'>Source Table</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan='2' scope="col">
+                                                    <span id="table_dn_@Model.selectedReport.table_id">@Model.selectedReport.table_name</span>
+                                                    <div id="selected_table_id" class="hidden">@Model.selectedReport.table_id</div>
+                                                    <div id="selected_report_id" class="hidden">@Model.selectedReportId</div>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+
+
+                                        <thead class="mt-5 pt-5">
+                                            <tr>
+                                                <th scope="col" colspan='2' >Current Conditions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                @if (Model.selectedReport.condition != null)
+                                                {
+                                                    <td colspan='2' >
+
+                                                        <table class="table table-condensed table-hover table-striped table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th  scope="col" id="col-con1-column">Column</th>
+                                                                    <th scope="col" id="col-con1-condition">Condition</th>
+                                                                    <th scope="col" id="col-con1-value">Value</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+
+                                                                @foreach (SomatusAnalytics.Models.ReportBuilderCondition cond in Model.selectedReport.condition)
+                                                                {
+
+                                                                    <tr>
+                                                                        <td> @cond.column</td>
+                                                                        @if (@cond.condition_operator.Equals("IN"))
+                                                                        {
+                                                                            <td> EQUAL TO</td>
+                                                                        }
+                                                                        else if (@cond.condition_operator.Equals("NOT IN"))
+                                                                        {
+                                                                            <td> NOT EQUAL TO</td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td> @cond.condition_operator</td>
+                                                                        }
+
+                                                                        <td> @cond.condition_value</td>
+                                                                    </tr>
+                                                                }
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td colspan='2'>
+                                                        <div class="alert alert-info font-size-sm">
+                                                            <i>No Condition Applied</i>
+                                                        </div>
+                                                    </td>
+                                                }
+                                            </tr>
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                                <div class="col-lg-9 col-md-4 col-sm-12 table-outer-scroll" id='table-column-selection'>
+                                    <div class="alert alert-light notification">
+                                        <p class="notificaiton-title mb-2">
+                                            <strong>Information </strong>
+                                        </p>
+                                        <p>Please select table for configurations </p>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    }
+
+                </div>
+                @if (Model.selectedReportId > 0)
+                {
+                    <div class="card-footer">
+                        <button name="btn-save" class="btn btn-primary pull-right btn-report-builder-step2" id="btn-report-builder-save" disabled="disabled" data-toggle="modal" data-target="#saveModel">  <i class="fa fa-save"></i> Save   </button>
+                        <button name="btn-saveas" class="btn btn-default pull-right  m-r-5  btn-report-builder-step2" id="btn-report-builder-saveas" disabled="disabled" data-toggle="modal" data-target="#saveAsModel">  <i class="fa fa-copy"></i> Save Report As  </button>
+                    </div>
+
+                }
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="valueList" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="valueList" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form name="reportBuilderSaveForm" id="reportBuilderSaveForm" method="post" action="" novalidate="novalidate">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="saveReportModalLabel">Select Value</h5>
+
+                    </div>
+                    <div class="modal-body modal-body-scroll" id="value-list-result">
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="btn-save-report">Select</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="saveModel" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="saveModel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form name="reportBuilderSaveForm" id="reportBuilderSaveForm" method="post" action="" novalidate="novalidate">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="saveReportModalLabel">Save Report</h5>
+
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label for="report-name" class="col-form-label">Report Name:</label>
+                            <input type="text" class="form-control" id="reportName" placeholder="Enter report name" required="required" value="@Model.selectedReport.report_name">
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="btn-update-report">Save Report</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="saveAsModel" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="saveModel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form name="reportBuilderSaveAsForm" id="reportBuilderSaveAsForm" method="post" action="" novalidate="novalidate">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="saveReportModalLabel">Save Report As</h5>
+
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label for="report-name" class="col-form-label">Report Name:</label>
+                            <input type="text" class="form-control" id="reportAsName" placeholder="Enter report name" required="required" value="Copy - @Model.selectedReport.report_name">
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="btn-save-as-report">Save Report As</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>

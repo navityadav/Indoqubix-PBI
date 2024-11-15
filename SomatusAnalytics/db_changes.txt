@@ -1,0 +1,6 @@
+-- PAGINATION REPORT DB CHANGES
+ALTER TABLE [somatus-pbi].dbo.ac_powerbi_report ADD is_paginated char(1) DEFAULT 'N' NULL;
+
+-- 17 March 2022 ReadOnly Attribute for db settings
+ALTER TABLE [somatus-pbi].dbo.ac_report_builder_db_setting ADD db_read_only char(1) DEFAULT 0 NULL;
+

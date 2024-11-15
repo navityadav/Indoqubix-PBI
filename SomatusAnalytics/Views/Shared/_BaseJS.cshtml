@@ -1,0 +1,48 @@
+﻿@{
+    var adUser = SomatusAnalytics.Common.UserContextManager.isADUser();
+    var role = SomatusAnalytics.Common.UserContextManager.getRole();
+}
+
+<!-- Required vendors -->
+<script type="text/javascript" src="~/theme/light/vendor/jquery/jquery.min.js"></script>
+<script src="~/theme/light/vendor/global/global.min.js"></script>
+
+<script type="text/javascript" src="~/theme/light/vendor/jquery-validation/jquery.validate.js"></script>
+
+<script type="text/javascript" src="~/theme/light/vendor/waitme/waitMe.min.js"></script>
+<script src="~/theme/light/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+
+<script src="~/theme/light/js/custom.min.js?t-1.4"></script>
+<script src="~/theme/light/js/theme-init.js"></script>
+
+<!-- Svganimation scripts -->
+<script src="~/theme/light/vendor/svganimation/vivus.min.js"></script>
+<script src="~/theme/light/vendor/svganimation/svg.animation.js"></script>
+
+<!-- Toastr -->
+<script src="/theme/light/vendor/toastr/js/toastr.min.js"></script>
+
+
+<script type="text/javascript" src="~/theme/light/js/iq-core.js?t-1.6"></script>
+<script type="text/javascript" src="~/theme/light/js/iq-app-base.js?t-1.6"></script>
+<script type="text/javascript" src="~/theme/light/js/iq-action.js?t-1.6"></script>
+<script type="text/javascript" src="~/theme/light/js/iq-admin-action.js?t-1.6"></script>
+<script type="text/javascript" src="~/theme/light/vendor/handsontable/handsontable.full.min.js"></script>
+
+
+
+
+@if (role != null && role.Contains("ADMIN"))
+{
+
+    <script src="/theme/light/vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="~/theme/light/js/bootstrap-treeview.js"></script>
+    <script src="~/theme/indoqubix/lib/datatable/button/buttons.html5.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.colVis.min.js"></script>
+
+}
+
+<script type="text/javascript" language="javascript" src="~/theme/indoqubix/lib/download2.js"></script>
+<script src="/theme/light/vendor/sweetalert/sweetalert.min.js"></script>
+<script type="text/javascript" src="~/theme/indoqubix/lib/datepicker/js/bootstrap-datepicker.min.js"></script>

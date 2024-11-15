@@ -1,0 +1,144 @@
+
+
+CREATE USER [grp-db-dw-etl]
+FROM EXTERNAL PROVIDER
+WITH DEFAULT_SCHEMA = dbo;
+
+CREATE USER [grp-db-dw-app]
+FROM EXTERNAL PROVIDER
+WITH DEFAULT_SCHEMA = dbo;
+
+CREATE USER [grp-db-dw-dba]
+FROM EXTERNAL PROVIDER
+WITH DEFAULT_SCHEMA = dbo;
+
+CREATE USER [grp-db-dw-exec]
+FROM EXTERNAL PROVIDER
+WITH DEFAULT_SCHEMA = dbo;
+
+ALTER ROLE dbmanager ADD MEMBER [grp-db-dw-etl]; 
+ALTER ROLE loginmanager ADD MEMBER [grp-db-dw-etl]; 
+
+
+ALTER ROLE dbmanager ADD MEMBER [grp-db-dw-exec]; 
+ALTER ROLE loginmanager ADD MEMBER [grp-db-dw-exec]; 
+
+ALTER ROLE dbmanager ADD MEMBER [grp-db-dw-dba]; 
+ALTER ROLE loginmanager ADD MEMBER [grp-db-dw-dba]; 
+
+ALTER ROLE loginmanager ADD MEMBER [grp-db-dw-app]; 
+
+
+GRANT CONTROL ON DATABASE::renaliq_dw TO [grp-db-dw-dba];
+
+------------------------------------------
+
+
+CREATE WORKLOAD GROUP wgRenalIQ_LargeRc 
+WITH
+  ( -- integer value range from 0 to 100
+	MIN_PERCENTAGE_RESOURCE = 0                
+	-- Specifies the maximum resource utilization for all requests in a workload group: range from 1 to 100
+    , CAP_PERCENTAGE_RESOURCE = 22
+	-- factor of 30 (guaranteed a minimum of 6 concurrency)
+    , REQUEST_MIN_RESOURCE_GRANT_PERCENT = 1    
+	-- when system resources are available, additional resources are allocated to a request.
+	, REQUEST_MAX_RESOURCE_GRANT_PERCENT = 4
+	-- Importance set at the workload group is a default importance for all requests in the workload group.
+	, IMPORTANCE = NORMAL 						-- LOW | BELOW_NORMAL | NORMAL | ABOVE_NORMAL | HIGH -- Importance set at the workload group is a default importance for all requests in the workload group.
+	-- maximum time, in seconds, that a query can execute before it is canceled.
+	, QUERY_EXECUTION_TIMEOUT_SEC = 0 );
+
+
+	--DROP WORKLOAD CLASSIFIER classifierRenaliqETL
+CREATE WORKLOAD CLASSIFIER classifierRenaliqETL WITH  
+( WORKLOAD_GROUP = 'wgRenalIQ_LargeRc'  
+ ,MEMBERNAME     = 'grp-db-dw-etl' --can be a database user, database role, Azure Active Directory login, or Azure Active Directory group
+ ,IMPORTANCE     = ABOVE_NORMAL);
+
+ 	--DROP WORKLOAD CLASSIFIER classifierRenaliqDBA
+CREATE WORKLOAD CLASSIFIER classifierRenaliqDBA WITH  
+( WORKLOAD_GROUP = 'wgRenalIQ_LargeRc'  
+ ,MEMBERNAME     = 'grp-db-dw-dba' --can be a database user, database role, Azure Active Directory login, or Azure Active Directory group
+ ,IMPORTANCE     = HIGH);
+
+CREATE WORKLOAD GROUP wgRenalIQ_MediumRc 
+WITH
+  ( -- integer value range from 0 to 100
+	MIN_PERCENTAGE_RESOURCE = 0                
+	-- Specifies the maximum resource utilization for all requests in a workload group: range from 1 to 100
+    , CAP_PERCENTAGE_RESOURCE = 10
+	-- factor of 30 (guaranteed a minimum of 6 concurrency)
+    , REQUEST_MIN_RESOURCE_GRANT_PERCENT = 1    
+	-- when system resources are available, additional resources are allocated to a request.
+	, REQUEST_MAX_RESOURCE_GRANT_PERCENT = 10
+	-- Importance set at the workload group is a default importance for all requests in the workload group.
+	, IMPORTANCE = NORMAL 						-- LOW | BELOW_NORMAL | NORMAL | ABOVE_NORMAL | HIGH -- Importance set at the workload group is a default importance for all requests in the workload group.
+	-- maximum time, in seconds, that a query can execute before it is canceled.
+	, QUERY_EXECUTION_TIMEOUT_SEC = 0 );
+	
+		--DROP WORKLOAD CLASSIFIER classifierRenaliqETL
+CREATE WORKLOAD CLASSIFIER classifierRenaliqEXEC WITH  
+( WORKLOAD_GROUP = 'wgRenalIQ_MediumRc'  
+ ,MEMBERNAME     = 'grp-db-dw-exec' --can be a database user, database role, Azure Active Directory login, or Azure Active Directory group
+ ,IMPORTANCE     = HIGH);
+
+ 	--DROP WORKLOAD CLASSIFIER classifierRenaliqDBA
+CREATE WORKLOAD CLASSIFIER classifierRenaliqAPP WITH  
+( WORKLOAD_GROUP = 'wgRenalIQ_MediumRc'  
+ ,MEMBERNAME     = 'grp-db-dw-app' --can be a database user, database role, Azure Active Directory login, or Azure Active Directory group
+ ,IMPORTANCE     = NORMAL);
+
+ SELECT * FROM sys.workload_management_workload_classifiers WHERE classifier_id > 12
+SELECT * FROM sys.workload_management_workload_classifier_details WHERE classifier_id > 12
+
+SELECT * FROM sys.workload_management_workload_groups where group_id>12 order by group_id
+SELECT * FROM sys.dm_workload_management_workload_groups_stats order by group_id
+
+DROP WORKLOAD CLASSIFIER classifierRenaliqDBA
+DROP WORKLOAD CLASSIFIER classifierRenaliqETL
+DROP WORKLOAD GROUP wgRenalIQ_Mediumrc 
+
+
+
+
+GRANT ADMINISTER DATABASE BULK OPERATIONS TO [grp-db-dw-etl]
+
+GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON SCHEMA::uhc TO [grp-db-dw-etl];
+GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON SCHEMA::patientping TO [grp-db-dw-etl];
+GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON SCHEMA::humana TO [grp-db-dw-etl];
+GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON SCHEMA::hcsc TO [grp-db-dw-etl];
+GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON SCHEMA::gtwy TO [grp-db-dw-etl];
+GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON SCHEMA::dbo TO [grp-db-dw-etl];
+GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON SCHEMA::cnc TO [grp-db-dw-etl];
+GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON SCHEMA::carefirst TO [grp-db-dw-etl];
+GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON SCHEMA::bcbst TO [grp-db-dw-etl];
+
+GRANT CREATE TABLE, CREATE VIEW, CREATE PROCEDURE TO [grp-db-dw-etl];
+
+
+GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON SCHEMA::uhc TO [grp-db-dw-exec];
+GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON SCHEMA::patientping TO [grp-db-dw-exec];
+GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON SCHEMA::humana TO [grp-db-dw-exec];
+GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON SCHEMA::hcsc TO [grp-db-dw-exec];
+GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON SCHEMA::gtwy TO [grp-db-dw-exec];
+GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON SCHEMA::dbo TO [grp-db-dw-exec];
+GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON SCHEMA::cnc TO [grp-db-dw-exec];
+GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON SCHEMA::carefirst TO [grp-db-dw-exec];
+GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON SCHEMA::bcbst TO [grp-db-dw-exec];
+
+GRANT CREATE TABLE, CREATE VIEW, CREATE PROCEDURE TO [grp-db-dw-exec];
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::uhc TO [grp-db-dw-app];
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::patientping TO [grp-db-dw-app];
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::humana TO [grp-db-dw-app];
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::hcsc TO [grp-db-dw-app];
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::gtwy TO [grp-db-dw-app];
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::dbo TO [grp-db-dw-app];
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::cnc TO [grp-db-dw-app];
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::carefirst TO [grp-db-dw-app];
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::bcbst TO [grp-db-dw-app];
+
+
+
+

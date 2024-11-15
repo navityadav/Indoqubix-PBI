@@ -1,0 +1,87 @@
+﻿@model SomatusAnalytics.Models.ReportBuilderConfig
+
+@{
+
+    Layout = "~/Views/Shared/_LayoutAjax.cshtml";
+}
+<table class="table table-hover table-condensed">
+    <thead>
+        <tr>
+            <th scope="col"><input type="checkbox" value="col1" name='sel_col1' id='select-all-cols' /></th>
+            <th scope="col">Select Data Columns</th>
+            <th scope="col" class='font-normal'>Display Name</th>
+            <th scope="col" class='font-normal'>Condition Type</th>
+            <th scope="col" class='font-normal'>Condition Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var column in Model.columns)
+        {
+            if (column.Key.Contains("/") || column.Key.Contains(" ") || column.Key.Contains("#") || @column.Value.Equals("NOT_SUPPORTED"))
+            {
+                 <tr class='text-danger'>
+
+                        <td class="columns" colspan="5">@column.Key - NOT SUPPORTED</td>
+                    </tr>
+
+            }
+            else {
+    <tr id="row_@column.Key" >
+        <th scope="row"><input type="checkbox" value="@column.Key" name='@column.Key' class='select-column' id='check_@column.Key' /></th>
+        <td class="columns">@column.Key</td>
+        <td><input type="text" class="form-control form-control-sm" value="@column.Key" name='col_name_@column.Key' id='col_name_@column.Key' /></td>
+        <td>
+            <select class="form-control form-control-sm  " name='col_condition_@column.Key' id='col_condition_@column.Key'>
+                <!-- <option value='EQUAL'>=</option>
+     <option value='LESS THAN'>&LT;</option>
+     <option value='LESS THAN or EQUAL'>&LT;=</option>
+     <option value='GREATER THAN'>&GT;</option>
+     <option value='GREATER THAN or EQUAL'>&GT;=</option>
+     <option value='NOT EQUAL'>!=</option>
+     <option value='IN'>in</option>
+     <option value='NOT IN'>Not in</option>
+     <option value='CONTAINS'>Contains</option>-->
+
+
+
+                <option value='IN'>EQUAL TO</option>
+                <option value='NOT IN'>NOT EQUAL TO</option>
+                <option value='LESS THAN'>LESS THAN</option>
+                <option value='GREATER THAN'>GREATER THAN</option>
+                <option value='CONTAINS'>CONTAINS</option>
+            </select>
+
+        </td>
+        <td>
+            @if (@column.Value.Equals("DATE") || @column.Value.Equals("DATETIME"))
+            {
+                <div class="input-group date">
+                    <input type="text" class="form-control ui-weekdatepicker" name='col_value_@column.Key' id='col_value_@column.Key' placeholder="Select Date">
+                    <span class="input-group-addon look-up-date" data-col="@column.Key" id='col_action_@column.Key'>
+                        <i class="fa fa-calendar-o"></i>
+                    </span>
+                </div>
+
+
+            }
+            else if (@column.Value.Equals("STRING"))
+            {
+                <div class="input-group ">
+                    <input type="text" class="form-control " name='col_value_@column.Key' id='col_value_@column.Key' placeholder="Write Value">
+                    <span class="input-group-addon look-up-list" for="col_value_@column.Key" id='col_action_@column.Key' data-col="@column.Key"><i class="fa fa-list"></i></span>
+                </div>
+
+            }
+            else 
+            {
+                <input type="text" class="form-control " name='col_value_@column.Key' id='col_value_@column.Key' placeholder="Write Value">
+                
+            }
+
+        </td>
+        </tr>
+             }
+          }
+
+            </tbody>
+</table>

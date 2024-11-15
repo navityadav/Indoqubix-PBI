@@ -1,0 +1,1 @@
+robocopy "C:\Repo_Indequbix_github\RenalIQInsight" "C:\Repo_Somatus\pbi"  /s /xf .* /xd .* 

@@ -1,0 +1,297 @@
+﻿@model SomatusAnalytics.Models.EmbedConfig
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+
+    var userFilters = SomatusAnalytics.Common.UserContextManager.getPowerBIReportFilters();
+    var filterCount = 0;
+}
+
+<script src="https://npmcdn.com/es6-promise@3.2.1"></script>
+<script src="~/scripts/powerbi.min.js"></script>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="admin content" >
+
+        <div class="alert alert-danger alert-dismissible fade show">
+            @Model.ErrorMessage
+            <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                <span><i class="mdi mdi-close"></i></span>
+            </button>
+
+           
+
+        </div>
+    </div>
+
+
+        <script>
+        var config = "";
+       
+        </script>
+}
+else
+{
+
+
+<script>
+       var FILTER_PROV = [];
+
+            /*
+    //const FILTER_PROV = [];
+        const FILTER_PROV = [
+
+              {
+        $schema: "http://powerbi.com/product/schema#basic",
+        filterType: 1,
+        requireSingleSelection: false,
+        target: {
+            table: "Dim_Metric_Name",
+            column: "PROV_SPC"
+        },
+        operator: "In",
+        values: ["NEP"]
+    },{
+        $schema: "http://powerbi.com/product/schema#basic",
+        filterType: 1,
+        requireSingleSelection: false,
+        target: {
+            table: "PP_ProviderMetrics",
+            column: "ProviderGroup"
+        },
+        operator: "In",
+        values: ["EAGLES LANDING FAMILY PRACTICE"]
+    },{
+        $schema: "http://powerbi.com/product/schema#basic",
+        filterType: 1,
+        requireSingleSelection: false,
+        target: {
+            table: "PP_RegionMetrics",
+            column: "Region"
+        },
+        operator: "In",
+        values: ["GA 2 - NE Atlanta"]
+    }];*/
+
+    // Read embed application token from Model
+    var accessToken = "@Model.EmbedToken.Token";
+
+    // Read embed URL from Model
+    var embedUrl = "@Html.Raw(Model.EmbedUrl)";
+
+    // Read report Id from Model
+    var embedReportId = "@Model.Id";
+
+    var showFilter = false;
+    if ("@Model.showFilter" == "Y")
+        showFilter = true;
+
+    var showTab = false;
+    if ("@Model.showTab" == "Y")
+        showTab = true;
+
+    // Get models. models contains enums that can be used.
+    var models = window['powerbi-client'].models;
+
+
+    // Get a reference to the embedded report HTML element
+    var reportContainer ="";
+
+    // Embed the report and display it within the div container.
+   // var report = powerbi.embed(reportContainer, config);
+
+</script>
+
+        }
+
+
+<div class="admin content" data-ref="init_power_bi_report" id="embed-content">
+    <input type="hidden" name="reportURI" id="download-reportURI" value="@Model.reportURI" />
+    @foreach (SomatusAnalytics.Models.PowerBIReportFilter filter in userFilters)
+    {
+        filterCount++;
+        <div id="filter_@filterCount" data-table="@filter.table" data-column="@filter.column" class="hidden">@filter.value</div>
+    }
+    @foreach (SomatusAnalytics.Models.PowerBIReportFilter filter in Model.PagerReportFilters)
+    {
+        filterCount++;
+        <div id="filter_@filterCount" data-table="@filter.table" data-column="@filter.column" class="hidden">@filter.value</div>
+    }
+    <input type="hidden" name="filter-count" id="filter-count" value="@filterCount" />
+
+    <div class="sticky-nav-top">
+
+        <a class="sticky-nav-top__link sticky-nav-back" id="back-report-navigation" href="#">
+            <i class="fa fa-arrow-left"></i> <span class="ml-1">Back</span>
+        </a>
+
+        <a class="sticky-nav-top__link ml-2" id="subscribe-report" href="#">
+            <i class="fa fa-envelope-o"></i> <span class="ml-1">Email Report</span>
+        </a>
+    </div>
+
+    <div class="sticky-nav hidden">
+        <a class="sticky-nav__link hidden" href="#" id="exit-full-screen">
+            <i class="fa fa-compress mr-2"></i> <span class="ml-1">Exit Full Screen</span>
+        </a>
+        <a class="sticky-nav__link" href="#" id="enter-full-screen">
+            <i class="fa fa-expand mr-2"></i> <span class="ml-1">Full Screen</span>
+        </a>
+        <a class="sticky-nav__link" id="1subscribe-report" href="#">
+            <i class="fa fa-handshake-o mr-2"></i> <span class="ml-1">Subscribe</span>
+        </a>
+        <a class="sticky-nav__link" id="btn-download-pbi-report" href="#">
+            <i class="fa fa-envelope-o mr-2"></i> <span class="ml-1">Email</span>
+        </a>
+    </div>
+    <!--    <button class="full-screen-button hidden" id="exit-full-screen"><i class="fa fa-compress"></i> <span class="btn-label">Exit Full Screen</span></button>
+    <button class="full-screen-button" id="enter-full-screen"><i class="fa fa-expand"></i> <span class="btn-label">Full Screen</span></button>
+    <button class="full-screen-button print-button" id="subscribe-report"><i class="fa fa-play"></i> <span class="btn-label">Subscribe Report</span></button>
+    <button class="full-screen-button download-button" id="btn-download-pbi-report"><i class="fa fa-envelope"></i> <span class="btn-label">Email</span></button>
+        -->
+
+    <div id="embedContainer"></div>
+
+
+
+</div>
+       
+
+        <div class="modal fade" id="downloadReportModelSuccess" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="downloadReportModelSuccess" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <form name="downloadReportForm" id="downloadReportForm" method="post" action="" novalidate="novalidate">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="downloadReportModalLabel">  <i class="fa fa-envelope"></i> Status</h5>
+                        </div>
+                        <div class="modal-body">
+                            <h5>
+                                Request for sending report via email submitted successfully.
+                                <br /><br />
+                                We will email
+                                <b><span id="download-request-report-name"> </span>.pdf</b> report soon.
+                            </h5>
+                        </div>
+                        <div class="modal-footer">
+
+                            <button type="button" class="btn btn-primary pull-right" data-dismiss="modal">  Close </button>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+ <!-- Modal -->
+    <div class="modal fade" id="subscribeReportModel" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="subscribeReportModel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form name="downloadReportForm" id="downloadReportForm" method="post" action="" novalidate="novalidate">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="subscribeReportModelLabel">  <i class="fa fa fa-download-o"></i> Email Report </h5>
+
+                    </div>
+                    <div class="modal-body">
+
+
+                        <lable>Selected Report</lable>
+                        <div class="alert alert-dark" id="subscribe-report-names"></div>
+                        <input type="hidden" class="form-control" id="subscribedReportType" value="PBI" />
+                        <input type="hidden" class="form-control" id="subscribedReportId" />
+                        <div class="alert alert-info" role="alert" id="already-subscribed-report">
+                            <p id="already-subscribed-report-text"></p>
+                        </div>
+                        <div class="form-check form-gorup form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioReportSelectionOptions" id="inlineDownload" value="downloadReport"  />
+                            <label class="form-check-label" for="inlineDownload">Email Now</label>
+
+                            <input class="form-check-input" type="radio" name="inlineRadioReportSelectionOptions" id="inlineSubscribe" value="subscribeReport">
+                            <label class="form-check-label" for="inlineSubscribe">Schedule Email</label>
+                        </div>
+
+                        <div class="report-download-section p-1">
+                            <label for="confirmDeleteText" class="col-form-label">Enter file name </label>
+                            <input type="text" class="form-control" id="downloadFileName" name="downloadFileName" placeholder="Enter File Name" required="required" lenght="30">
+                            <div class="lable-text-info pull-right text-mutted">
+                                .pdf
+                            </div>
+                            <div class="report-download-section-text p-1">
+                                <div class="lable-text-info text-mutted  small font-italic">
+                                    *Note : The requested report will be emailed within 10 minutes.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="report-subscription-section hidden">
+                            <div class="row mt-2">
+                                <div class="form-group col-md-6 frequency-div ">
+                                    <label for="subscribe-frequency">Frequency</label>
+                                    <select class="form-control" id="subscribe-frequency" name="subscribe-frequency">
+                                        <option value="DAY" selected>Daily</option>
+                                        <option value="WEEK">Weekly</option>
+                                        <option value="MONTH">Monthly</option>
+
+                                    </select>
+                                </div>
+                                <div class="form-group subscribe-frequency-weekday-block  col-md-6">
+                                    <label for="subscribe-frequency">Weekday</label>
+                                    <select class="form-control" id="subscribe-frequency-weekday" name="subscribe-frequency-weekday">
+                                        <option value="0">Sunday</option>
+                                        <option value="1">Monday</option>
+                                        <option value="2">Tuesday</option>
+                                        <option value="3">Wednesday</option>
+                                        <option value="4">Thursday</option>
+                                        <option value="5">Friday</option>
+                                        <option value="6">Saturday</option>
+                                    </select>
+                                </div>
+                                <div class="form-group hidden subscribe-frequency-monthday-block col-md-6">
+                                    <label for="subscribe-frequency">Day of Month</label>
+                                    <select class="form-control" id="subscribe-frequency-monthday" name="subscribe-frequency-monthday">
+                                        @{
+                                            var i = 0;
+                                            while (i < 28)
+                                            {
+                                                i += 1;
+                                                <option value="@i">@i</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="form-check form-check-inline hidden">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioLink" value="link" disabled="disabled" />
+                                <label class="form-check-label" for="inlineRadioLink">Online</label>
+
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioFile" value="file" checked>
+                                <label class="form-check-label" for="inlineRadioFile">Email Attachment</label>
+
+                            </div>
+                            <div class="alert alert-light report-file-link-block hidden">
+                                <div class="form-group inlineRadioLink-block">
+                                    <label for="confirmDeleteText" class="col-form-label">Report Name (Displayed in Email)</label>
+                                    <input type="text" class="form-control" id="subscribedReportDisplayName" name="subscribedReportDisplayName" placeholder="Enter Report Name" required="required" lenght="30">
+                                </div>
+                                <div class="form-group inlineRadioFile-block hidden">
+                                    <label for="confirmDeleteText" class="col-form-label">File Name</label>
+                                    <input type="text" class="form-control" id="subscribedFileName" name="subscribedFileName" placeholder="Enter Report Name" required="required" lenght="30">
+                                    <div class="lable-text-info pull-right text-mutted ">
+                                        .xlsx&nbsp;&nbsp;
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left " data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary pull-right" id="btn-subscribe-report">  Submit </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>

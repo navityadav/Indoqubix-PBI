@@ -1,0 +1,134 @@
+﻿@model SomatusAnalytics.Models.ReportBuilderTableModel
+
+@{
+
+    Layout = "~/Views/Shared/_LayoutAjax.cshtml";
+}
+
+@if (Model.error != null)
+{
+    <div class="row">
+        <div class="card-header">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="main_title no-border ">Preview  Error <span class='sub-title text-muted'>Source : @Model.table_name</span></div>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="row message">
+                    <!-- ERROR BLOCK-->
+
+                    <div class="row-fluid">
+                        <div class="container-pad text-danger">
+
+                            <div class="span12">
+
+                                <div class="hero-unit">
+
+                                    <p class='title'> Error</p><hr/>
+                                    <div class="block p-b-20">@Model.error </div>
+                                    <div class="block p-b-20">@Model.query </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <!-- END OF ERROR BLOCK-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a name="btn-cancel" class="btn btn-danger" id="btn-report-builder-step0" href="~/reportbuilder/configure">  <i class="fa fa-close"></i> Cancel </a>
+
+
+       
+        <button name="btn-back" class="btn btn-default pull-right m-r-5" id="btn-report-builder-step1">  <i class="fa fa-chevron-left"></i> Back </button>
+
+
+    </div>
+
+}
+else
+{
+  
+<div class="card-header pb-0 pt-2 pr-3 pl-3">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 ">
+            <h5 class="pt-3"> Preview <span class='sub-title text-muted'> : @Model.table_name</span></h5>
+           
+        </div>
+
+    </div>
+</div>
+<div class="card-body pt-4">
+    
+            <div class="row1">
+                <form id="configure-table-form">
+                    <table id="data-table" class="display" style="width:100%">
+                        <thead>
+                            <tr>
+                                @foreach (SomatusAnalytics.Models.ReportBuilderTableColumn column in Model.columns)
+                                {
+                                    <th scope="col">@column.display_name</th>
+                                }
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (System.Data.DataRow row in Model.data.Rows)
+                            {
+                                <tr>
+                                    @foreach (System.Data.DataColumn col in Model.data.Columns)
+                                    {
+                                        <td>@row[@col]</td>
+                                    }
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+
+       
+</div>
+<div class="card-footer">
+        <a name="btn-cancel" class="btn btn-danger" id="btn-report-builder-step0" href="~/reportbuilder/configure">  <i class="fa fa-close"></i> Cancel </a>
+
+
+        <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#saveModel">
+            <i class="fa fa-save"></i> Save Report
+        </button>
+        <button name="btn-back" class="btn btn-default pull-right m-r-5" id="btn-report-builder-step1">  <i class="fa fa-chevron-left"></i> Back </button>
+
+</div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="saveModel" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="saveModel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form name="reportBuilderSaveForm" id="reportBuilderSaveForm" method="post" action="" novalidate="novalidate">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="saveReportModalLabel">Save Report</h5>
+
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label for="report-name" class="col-form-label">Report Name:</label>
+                            <input type="text" class="form-control" id="reportName" placeholder="Enter report name" required="required">
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="btn-save-report">Save Report</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    }

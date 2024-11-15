@@ -1,0 +1,65 @@
+﻿@{
+    var theme = SomatusAnalytics.Common.Settings.THEME;
+    var domaincss = "/theme/indoqubix/css/signin-" + theme + ".css";
+    var logo = "/theme/indoqubix/img/" + theme + "-logo.png";
+}
+
+
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Indoqubix CloudTech</title>
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <!-- Favicon icon -->
+    <link rel="icon" href="~/theme/somatus-fav.png" sizes="32x32" />
+    <link rel="icon" href="~/theme/somatus-fav.png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="~/theme/somatus-fav.png" />
+    <meta name="msapplication-TileImage" content="~/theme/somatus-fav.png" />
+
+    <link href="~/theme/light/css/style.css" rel="stylesheet">
+
+    <link href="~/theme/light/css/custom.css" rel="stylesheet">
+
+<link rel="stylesheet" type="text/css" href="~/theme/indoqubix/lib/waitme/waitMe.css" />
+
+</head>
+
+<body class="h-100">
+    <div class="authincation h-100">
+        <div class="row align-items-stretch no-gutters h-100">
+            <div class="col-md-6 col-lg-7 col-xl-8 authincation-figure authincation-figure-new">
+                @*<div class="authincation-figure-info">
+                    <img src="~/theme/light/images/somatus.png" alt="Somatus" />
+                </div>*@
+            </div>
+            <div class="col-md-6 col-lg-5 col-xl-4 authincation-content d-flex flex-column">
+                <div class="flex-fill authincation-content-inner d-flex align-items-center">
+                    <div class="flex-fill">
+                        <input type="hidden" class="form-control" name="pagetype" id="pagetype" value="LOGIN">
+                        <div class="row no-gutters">
+                            <div class="col-xl-12">
+                                @RenderBody()
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="versionText text-center p-2">Version 1.0</div>
+            </div>
+        </div>
+    </div>
+    <div class="deznav-scroll"></div>
+    @RenderPage("~/Views/Shared/_BaseJs.cshtml")
+
+
+
+</body>
+
+</html>
+
+
+

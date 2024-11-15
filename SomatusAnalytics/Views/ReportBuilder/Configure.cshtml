@@ -1,0 +1,123 @@
+﻿@model SomatusAnalytics.Models.ReportBuilderConfig
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+    <div class="admin content default-content " data-ref="init_report_builder_Config" parent-menu="report-builder" self-menu="configure">
+       
+
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4> <i class="fa fa-cogs"></i> Create New Report</h4>
+                    <p class="mb-0"></p>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="~/reportbuilder/list">Self Service</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0)">Configure</a></li>
+                </ol>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-12" >
+                <div class="card" id='datatable-configuration-block'>
+                    <div class="hidden" id="report-preiew">
+                        
+                    </div>
+                    <div  id="report-builder-configure">
+                        <div class="card-body">
+                            @if (Model.tables.Count <= 0)
+                            {
+                                <div class="form-input-content text-center error-page">
+
+                                    <h4>Information </h4>
+                                    <p>Self Sevice Feature not enabled, please contact System Administrator</p>
+                                    <div>
+                                        <a class="btn btn-primary" href="/">Back to Home</a>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+
+                                    <form id="configure-table-form">
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-4 col-sm-12 table-outer-scroll">
+                                                <table class="table table-hover table-condensed">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan='2' scope="col">Select Source Table</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (SomatusAnalytics.Models.ReportBuilderTable table in Model.tables)
+                                                        {
+                                                            <tr id="@table.table_id">
+                                                                <th scope="row"><input type="radio" aria-label="@table.table_id" value="@table.table_id" name='select-table' /></th>
+                                                                <td id="table_dn_@table.table_id">@table.display_name</td>
+
+                                                            </tr>
+                                                        }
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-lg-9 col-md-4 col-sm-12 table-outer-scroll" id='table-column-selection'>
+                                                <div class="alert alert-light notification">
+                                                    <p class="notificaiton-title mb-2">
+                                                        <strong>Information </strong>
+                                                    </p>
+                                                    <p>Please select table for configurations </p>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                               
+
+                            }
+                        </div>
+
+
+                        @if (Model.tables.Count > 0)
+                        {
+                            <div class="card-footer">
+                                <button name="btn-next" class="btn btn-primary pull-right btn-report-builder-step2" disabled="disabled"> Next <i class="fa fa-chevron-right"></i> </button>
+
+                            </div>
+
+                        }
+                    </div>
+                </div>
+        </div>
+
+    </div>
+</div>
+    <!-- Modal -->
+    <div class="modal fade" id="valueList" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="valueList" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form name="reportBuilderSaveForm" id="reportBuilderSaveForm" method="post" action="" novalidate="novalidate">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="saveReportModalLabel">Select Value</h5>
+
+                    </div>
+                    <div class="modal-body modal-body-scroll" id="value-list-result">
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="btn-save-report">Select</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>

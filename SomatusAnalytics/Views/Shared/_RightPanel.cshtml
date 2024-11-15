@@ -1,0 +1,131 @@
+﻿@{
+	var adUser = SomatusAnalytics.Common.UserContextManager.isADUser();
+	var clientList = SomatusAnalytics.Common.UserContextManager.getClients();
+	var defaultClientId = SomatusAnalytics.Common.UserContextManager.getDefaultClientId();
+	var selectedClientId = SomatusAnalytics.Common.UserContextManager.getSelectedClientId();
+}
+
+<!--**********************************
+			Chat box start
+		***********************************-->
+@if (@clientList.Count > 1)
+{
+	<div class="chatbox">
+		<div class="chatbox-close"></div>
+		<div class="custom-tab-1">
+			<ul class="nav nav-tabs">
+				<li class="nav-item">
+					<a class="nav-link active" data-toggle="tab" href="#notes">
+						Department/Group
+
+					</a>
+				</li>
+
+			</ul>
+			<div class="tab-content ">
+				<div class="tab-pane fade  active show" id="notes">
+					<div class="card mb-sm-3 mb-md-0 note_card">
+						<div class="card-header chat-list-header text-center">
+							<div>
+								<p class="mb-0">SELECT DEPARTMENT/GROUP TO VIEW REPORTS</p>
+							</div>
+						</div>
+						<div class="card-body contacts_body p-0 dz-scroll" id="DZ_W_Contacts_Body2">
+							<ul class="contacts">
+								@foreach (SomatusAnalytics.Models.ClientModel client in @clientList as List<SomatusAnalytics.Models.ClientModel>)
+								{
+									<li class="active">
+										<div class="d-flex bd-highlight">
+											<div class="user_info">
+												<span>@client.clientName</span>
+												@if (@client.clientId == defaultClientId)
+												{
+													<p>Default Group</p>
+												}
+											</div>
+											<div class="ml-auto">
+												@if (@client.clientId != defaultClientId)
+												{
+													<a href="#" class="btn btn-light sharp set-default-client" data-ref="@client.clientId">Set as default</a>
+												}
+
+												@if (@client.clientId != selectedClientId)
+												{
+													<a href="#" class="btn btn-light sharp change-client" data-ref="@client.clientId">Select</a>
+												}
+												else
+												{
+													<button class="btn btn-light sharp change-client" disabled>Select</button>
+
+												}
+											</div>
+										</div>
+									</li>
+								}
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+
+<div class="chatbox hidden">
+	<div class="chatbox-close"></div>
+	<div class="custom-tab-1">
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a class="nav-link active" data-toggle="tab" href="#notes">
+					Department/Group
+
+				</a>
+			</li>
+
+		</ul>
+		<div class="tab-content ">
+			<div class="tab-pane fade  active show" id="notes">
+				<div class="card mb-sm-3 mb-md-0 note_card">
+					<div class="card-header chat-list-header text-center">
+						<div>
+							<p class="mb-0">SELECT DEPARTMENT/GROUP TO VIEW REPORTS</p>
+						</div>
+					</div>
+					<div class="card-body contacts_body p-0 dz-scroll" id="DZ_W_Contacts_Body2">
+						<ul class="contacts">
+							<li class="active">
+								<div class="d-flex bd-highlight">
+									<div class="user_info">
+										<span>Client 1</span>
+
+									</div>
+									<div class="ml-auto">
+										<a href="#" class="btn btn-light sharp set-default-client" data-ref="1">Set as default</a>
+										<a href="#" class="btn btn-light sharp change-client" data-ref="1">Select</a>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="d-flex bd-highlight">
+									<div class="user_info">
+										<span>Client 2</span>
+										<p>Default Group</p>
+									</div>
+									<div class="ml-auto">
+										<p>Selected</p>
+									</div>
+								</div>
+							</li>
+
+						</ul>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+<!--**********************************
+	Chat box End
+***********************************-->

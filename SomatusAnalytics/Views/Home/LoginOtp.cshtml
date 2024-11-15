@@ -1,0 +1,67 @@
+﻿@model SomatusAnalytics.Models.IndexConfig
+
+@{
+    ViewBag.Title = "Somatus Inc | RenalIQ Insights - Account Verification";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+    var userName = Session["USER_ID"];
+    //var otp = Session["OTP"];
+
+    var theme = SomatusAnalytics.Common.Settings.THEME;
+    var systemBaseURL = "https://analyticsi.renaliq.com/home/signin";
+}
+
+
+<div class="func-content admin content" data-ref="init_login">
+    <div class="auth-form">
+        <div class="text-center mb-3">
+            <img src="~/theme/light/images/renaliq-insight2.png" alt="Renaliq Insight" />
+        </div>
+        <h5 class="text-center mb-4 mt-5">A verification code has been sent to your email</h5>
+
+        <form name="login-otp-form" action="~/home/validateOtp" method="POST" id="login-otp-form">
+
+            <label class="mb-1"><strong>Email:</strong></label>
+            <div class="alert btn-primary alert-dismissible fade show " role="alert">
+
+                <strong>@userName</strong>
+
+            </div>
+
+            <div class="form-group">
+                <label class="mb-1"><strong>Verification code:</strong></label>
+                <input type="text" value="" class="form-control" placeholder="Enter 6 digit verification code" tabindex="2" name="otp" id="otp" required="required">
+            </div>
+            <input type="hidden" class="form-control" name="redirect" id="redirect" value="DEFAULT">
+
+            <div class="form-row d-flex justify-content-between mt-4 mb-2 ">
+                <div class="form-group col-md-12">
+                    <!--  <button type="submit" class="btn btn-secondary col-md-4 float-left" tabindex="4" id='btn-otp-cancel'>
+                <i class="fa fa-power-off"></i> CANCEL
+            </button> -->
+                    <button type="submit" class="btn btn-primary  float-right" tabindex="4" id='btn-otp-confirm'>
+                        <i class="fa fa-lock"></i> CONFIRM
+                    </button>
+                </div>
+            </div>
+            <div class="text-center">
+
+            </div>
+        </form>
+        <div class="new-account mt-3">
+            <p class="text-right"> <a class="text-primary" href="~/home/loginOtp">Please click here to resend verification code</a></p>
+        </div>
+
+        @if (@Model.error!=null && @Model.error.Equals("WRONG_OTP"))
+        {
+    <div class="alert alert-danger alert-dismissible fade show " role="alert" id="msg-invalid">
+        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+
+        <strong>Error!</strong>  Invalid  verification code.
+        <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+            <span><i class="mdi mdi-close"></i></span>
+        </button>
+    </div>
+        }
+
+    </div>
+</div>

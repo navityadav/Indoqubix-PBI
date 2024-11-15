@@ -1,0 +1,193 @@
+﻿@{
+
+    var userName = SomatusAnalytics.Common.UserContextManager.getUserName();
+    var title = "";
+    var adUser = SomatusAnalytics.Common.UserContextManager.isADUser();
+    var helpUrl = SomatusAnalytics.Common.Settings.HELP_URL;
+    var logoutURL = "/Home/SignOut?p=local";
+    if (adUser)
+    {
+        logoutURL = "/Home/SignOut?p=ad";
+    }
+    var clientList = SomatusAnalytics.Common.UserContextManager.getClients();
+}
+
+
+<!--**********************************
+       Nav header start
+       ***********************************-->
+
+<div class="nav-header nav-header-new">
+    <a href="/" class="brand-logo">
+        <img class="logo-abbr" src="~/theme/light/images/indo-small.png" alt="">
+        @*<img class="logo-compact" src="~/theme/light/images/somatus.png" alt="">*@
+        @*<img class="brand-title" src="~/theme/light/images/somatus.png" alt="">*@
+        <img class="logo-compact" src="~/theme/light/images/indoqubix-logo.png?v=1.1" alt="">
+        <img class="brand-title" src="~/theme/light/images/indoqubix-logo.png?v=1.1" alt="">
+    </a>
+
+    <div class="nav-control nav-control-mobile">
+        <div class="hamburger">
+            <span class="line"></span><span class="line"></span><span class="line"></span>
+        </div>
+    </div>
+    <div class="nav-control-header">
+        <div class="navbar-toggle">
+            <i class="fa fa-bars"></i>
+        </div>
+    </div>
+   
+
+
+</div>
+<!--**********************************
+    Nav header end
+***********************************-->
+<!--**********************************
+           Header start
+       ***********************************-->
+    <div class="header">
+        <div class="header-content">
+            <nav class="navbar navbar-expand">
+                <div class="collapse navbar-collapse justify-content-between">
+                    <div class="header-left">
+                        @*<div class="d-sm-flex d-none">
+                            <img src="~/theme/light/images/renaliq-insight2.png" alt="RenalIQ Insight" width="150" />
+                        </div>*@
+                        <div class="head-name d-none d-lg-flex" id="page-main-title">
+
+                        </div>
+                    </div>
+
+                    <ul class="navbar-nav header-right">
+                        <!--
+    <li class="nav-item dropdown notification_dropdown">
+
+        <a class="nav-link bell ai-icon " href="#" data-toggle="modal" data-target="#contactUsModel" id="contactUsButton">
+            <svg id="icon-contactus" aria-hidden="true" width="24" height="24" viewBox="0 0 20 20" ill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.211,3.39H2.788c-0.22,0-0.4,0.18-0.4,0.4v9.614c0,0.221,0.181,0.402,0.4,0.402h3.206v2.402c0,0.363,0.429,0.533,0.683,0.285l2.72-2.688h7.814c0.221,0,0.401-0.182,0.401-0.402V3.79C17.612,3.569,17.432,3.39,17.211,3.39M16.811,13.004H9.232c-0.106,0-0.206,0.043-0.282,0.117L6.795,15.25v-1.846c0-0.219-0.18-0.4-0.401-0.4H3.189V4.19h13.622V13.004z"></path>
+            </svg>
+        </a>
+    </li>
+    -->
+                        <li class="nav-item dropdown notification_dropdown">
+                            <a class="nav-link bell dz-fullscreen" href="#">
+                                <svg id="icon-full" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                                <svg id="icon-minimize" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minimize"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path></svg>
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown notification_dropdown">
+                            <a class="nav-link bell ai-icon" href="#" role="button" data-toggle="dropdown">
+                                <svg id="icon-user" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell">
+                                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                                </svg>
+                                <div class="pulse-css notification-count hidden"></div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <div id="DZ_W_Notification1" class="widget-media dz-scroll p-3 " style="height:380px;">
+                                    <ul class="timeline notification-panel-messages">
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown notification_dropdown">
+                            <a class="nav-link" href="@helpUrl" target="_blank" id="iconHelp">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve" width="20" height="20">
+                                <g><path d="M500,990C229.4,990,10,770.6,10,500C10,229.4,229.4,10,500,10c270.6,0,490,219.4,490,490C990,770.6,770.6,990,500,990z M500,98.9C278.5,98.9,98.9,278.5,98.9,500c0,221.5,179.6,401.1,401.1,401.1c221.5,0,401.1-179.7,401.1-401.1C901.1,278.5,721.5,98.9,500,98.9z" /><path d="M493.5,644.9l-2.2-0.1c-37.6,0-65.6,27.3-66.7,64.9c-1.1,38.3,26.3,67,65.2,68.1h2.5c38.4,0,66.1-26.4,67.2-64.1C560.6,674.4,533.5,646.1,493.5,644.9z" /><path d="M682,374.6c0-50.3-18.1-89-53.8-114.8c-35.3-25.4-80.1-38.3-133.2-38.3c-40.4,0-75.2,9.1-103.1,27.1c-44.6,28.3-68.5,76.7-71.4,143.9l-0.1,4.8H430v-4.6c0-18.2,5.3-36.1,16.1-53.1c10.4-16.6,27.8-24.6,53.3-24.6c25.6,0,43.4,6.6,52.7,19.8c9.6,13.6,14.5,28.9,14.5,45.5c0,11.9-4.9,24-16.1,39.4c-4.7,6.9-11.2,13.5-18.8,19.2c-2.2,1.5-55.3,35.7-79.5,63.9c-15.3,18.1-16.2,39.8-17.5,76.9l-0.3,9.1h106.4l0.1-4.6c0.2-17.6,1.5-19.8,4.3-28.6c3.5-10.9,12.7-22.1,28-34l27.9-19.2c25.3-19.7,45.4-35.8,54.6-48.8l-0.1-0.1C673.1,429.4,682,402.8,682,374.6z" /></g>
+                                </svg>
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown header-profile">
+                            <a class="nav-link" href="#" role="button" data-toggle="dropdown">
+                                <img src="~/theme/light/images/profile/avatar.png" width="20" alt="" />
+                                <div class="header-info">
+                                    <span><strong>@userName</strong></span>
+                                    <small>@title</small>
+                                </div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <!--<a href="#" class="dropdown-item ai-icon">
+                <svg id="icon-user1" xmlns="http://www.w3.org/2000/svg" class="text-primary" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span class="ml-2">Profile </span>
+            </a>-->
+
+                                <a href="@logoutURL" class="dropdown-item ai-icon">
+                                    <svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-danger" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                                    <span class="ml-2">Logout </span>
+                                </a>
+                            </div>
+                        </li>
+                        @if (@clientList.Count > 1)
+                        {
+                            <li class="nav-item right-sidebar">
+                                <a class="nav-link bell ai-icon" href="#">
+                                    <svg id="icon-menu" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+<!--**********************************
+    Header end ti-comment-alt
+***********************************-->
+
+<div id="notification-message-v1" class="hidden">
+    <li id="notification-id-__NOTIFICATION_ID__">
+        <div class="timeline-panel" >
+            <div class="media-body __TEXT_STATUS_CLASS__">
+                <h6 class="mb-1"><i class="fa fa-__ICON__"></i> __MESSAGE__</h6>
+                <small class="d-block">Requested On: __REQUESTED_ON__</small>
+            </div>
+            <div data-filename="__FILE_NAME__" data-exportid="__NOTIFICATION_EXPORT_ID__" class="pull-right btn btn-outline-primary sharp mr-1 btn-sm __DOWNLOAD_ICON_VISIBILITY__ download-excel"><i class="fa fa-download"></i></div>
+
+        </div>
+    </li>
+</div>
+
+
+   <!-- Modal Contact Us -->
+        <div class="modal fade" id="contactUsModel" tabindex="-1" role="dialog" aria-labelledby="contactUsModel" >
+            <div class="modal-dialog" role="document">
+                <form name="contactUsForm" id="contactUsForm" method="post" action="" novalidate="novalidate">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="contactUsModelLabel"> 
+                                <svg  aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" ill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17.211,3.39H2.788c-0.22,0-0.4,0.18-0.4,0.4v9.614c0,0.221,0.181,0.402,0.4,0.402h3.206v2.402c0,0.363,0.429,0.533,0.683,0.285l2.72-2.688h7.814c0.221,0,0.401-0.182,0.401-0.402V3.79C17.612,3.569,17.432,3.39,17.211,3.39M16.811,13.004H9.232c-0.106,0-0.206,0.043-0.282,0.117L6.795,15.25v-1.846c0-0.219-0.18-0.4-0.401-0.4H3.189V4.19h13.622V13.004z"></path>
+                                </svg>
+                            Contact Us</h5>
+
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" class="form-control" id="userId" name="userId">
+                            <div class="row">
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="contactReport">Report Name</label>
+                                        <select  class="form-control" id="contactReport" name="contactReport" placeholder="Enter Report Name " required="required"></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contactSubject">Subject / Topic</label>
+                                        <input type="text" class="form-control" id="contactSubject" name="contactSubject" placeholder="Enter Subject or Topic Name " required="required">
+                                    </div>
+                                     <div class="form-group">
+                                        <label for="contactComments">Comments</label>
+                                        <textarea rows="8" class="form-control" id="contactComments"  name="contactComments" required="required"></textarea>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default pull-left " data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary pull-right" id="btn-contact-us"> Submit </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
